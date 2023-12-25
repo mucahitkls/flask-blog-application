@@ -62,7 +62,6 @@ def add_new_post():
     return render_template("make-post.html", form=form, type='create')
 
 
-
 @post_routes.route("/edit/<int:post_id>", methods=["GET", "POST"])
 @admin_only
 def edit_post(post_id):
