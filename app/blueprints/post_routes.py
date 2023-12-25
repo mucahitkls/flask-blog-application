@@ -10,7 +10,7 @@ post_routes = Blueprint('post_routes', __name__)
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.id != 1:
+        if not current_user.is_admin:
             return abort(403)
         return f(*args, **kwargs)
 
