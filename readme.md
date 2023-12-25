@@ -32,11 +32,15 @@ The Flask Blog Application is an interactive web platform designed for creating,
 
 - `app/`: Contains the Flask application, blueprints, and other components.
   - `app/blueprints/`: Flask blueprints for user, post, and static routes.
+  - `app/databas/`: Database for crud operation and db initiation.
+  - `app/forms/`: Flask forms for login, registration, blog post creation and comments.
+  - `app/models`: SQLAlchemy models for User, BlogPost and Comment.
+  - `app/services`: Authentication and security utilities.
   - `app/templates/`: HTML templates for the application.
   - `app/static/`: Static files like CSS and JavaScript.
-  - `app/models.py`: SQLAlchemy models for User and BlogPost.
 - `config.py`: Configuration settings for the application.
 - `run.py`: The entry point to run the Flask application.
+- `test_app.py`: The test point to run the Flask application.
 
 ## Getting Started
 
