@@ -3,7 +3,7 @@ from app.forms import CreatePostForm, CommentForm, UpdatePostForm
 from app.database import db, crud_post, crud_comment
 from flask_login import current_user
 from functools import wraps
-
+import logging
 post_routes = Blueprint('post_routes', __name__)
 
 
@@ -52,9 +52,11 @@ def add_new_post():
         is_post_exists = crud_post.get_post_by_title(db=db, title=post_title)
         if not is_post_exists:
             new_post = crud_post.create_new_post(db=db, create_post_form=form)
+            logging.info(f"New post {form.title.data} created by {current_user.email}")
             return redirect(url_for("post_routes.show_post", post_id=new_post.id))
         else:
             flash("There is already a post with that title", 'error')
+            logging.warning(f"Post title {form.title.data} already exists.")
             form.title.data = ""
             # Instead of redirecting, re-render the same page with the form containing the existing data
             return render_template("make-post.html", form=form, type='create')

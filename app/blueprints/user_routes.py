@@ -4,7 +4,7 @@ from app.database import db
 from app.database import crud_user
 from app.services import authentication
 from flask_login import login_user, current_user, logout_user
-
+import logging
 # Blueprint definition
 user_routes = Blueprint('user_routes', __name__)
 
@@ -19,12 +19,15 @@ def login():
         password = login_form.password.data
         if not user:
             flash("User does not exist")
+            logging.warning("Failed login attempt - User does not exist.")
             return redirect(url_for("user_routes.login"))
 
         elif not authentication.confirm_password(user.password, password):
             flash("email or password is wrong")
+            logging.warning("Failed login attempt - email or password wrong.")
             return redirect(url_for("user_routes.login"))
         else:
+            logging.info(f"User {user.email} logged in successfully.")
             login_user(user)
             return redirect(url_for("post_routes.get_all_posts"))
 
@@ -39,11 +42,13 @@ def register():
         user = crud_user.get_user_by_mail(db=db, email=register_form.email.data)
         if user:
             flash("user already exists, please try to login")
+            logging.info(f"User {user.email} already exists.")
             return redirect(url_for('user_routes.login'))
 
         user_to_register = crud_user.create_user(db=db, register_form=register_form)
         if user_to_register:
             login_user(user_to_register)
+            logging.warning("Registration failed.")
             return redirect(url_for("post_routes.get_all_posts"))
     return render_template("register.html", form=register_form, current_user=current_user)
 
@@ -51,4 +56,5 @@ def register():
 @user_routes.route("/logout")
 def logout():
     logout_user()
+    logging.info(f"User {current_user.email} logged out.")
     return redirect(url_for("post_routes.get_all_posts"))
