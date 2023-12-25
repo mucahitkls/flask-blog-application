@@ -8,11 +8,14 @@ from app.database import db
 from flask_gravatar import Gravatar
 from flask_login import LoginManager, current_user
 from flask_ckeditor import CKEditor
+from app.utilities import setup_logger
 
 import dotenv
 import os
 
 dotenv.load_dotenv()
+setup_logger()
+
 
 app = Flask(__name__, template_folder='templates')
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET_KEY")

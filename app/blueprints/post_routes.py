@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, abort
+from flask import Blueprint, render_template, redirect, url_for, abort, flash
 from app.forms import CreatePostForm, CommentForm, UpdatePostForm
 from app.database import db, crud_post, crud_comment
 from flask_login import current_user
@@ -48,10 +48,19 @@ def add_new_post():
     form = CreatePostForm()
 
     if form.validate_on_submit():
-        new_post = crud_post.create_new_post(db=db, create_post_form=form)
-        return redirect(url_for("post_routes.show_post", post_id=new_post.id))
+        post_title = form.title.data
+        is_post_exists = crud_post.get_post_by_title(db=db, title=post_title)
+        if not is_post_exists:
+            new_post = crud_post.create_new_post(db=db, create_post_form=form)
+            return redirect(url_for("post_routes.show_post", post_id=new_post.id))
+        else:
+            flash("There is already a post with that title", 'error')
+            form.title.data = ""
+            # Instead of redirecting, re-render the same page with the form containing the existing data
+            return render_template("make-post.html", form=form, type='create')
 
     return render_template("make-post.html", form=form, type='create')
+
 
 
 @post_routes.route("/edit/<int:post_id>", methods=["GET", "POST"])

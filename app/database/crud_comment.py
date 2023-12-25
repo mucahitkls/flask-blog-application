@@ -5,9 +5,6 @@ from app.models import Comment, BlogPost
 from flask_login import current_user
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 def get_comment_by_text(db: Session, comment_form: CommentForm) -> Comment:
     """
         Retrieves the first comment that matches the text from the given form.

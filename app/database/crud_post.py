@@ -6,6 +6,8 @@ from app.models import BlogPost
 from sqlalchemy.orm import Session
 from flask_login import current_user
 from datetime import date
+
+
 def get_post_by_id(db: Session, post_id: int) -> BlogPost:
     """
             Retrieves a post by id.
@@ -33,6 +35,36 @@ def get_post_by_id(db: Session, post_id: int) -> BlogPost:
         db.session.rollback()
         logging.error(f"Error retrieving post by id {post_id}: {e}")
         raise e
+
+
+def get_post_by_title(db: Session, title: str) -> BlogPost:
+    """
+            Retrieves a post by title.
+
+            Parameters:
+            - db (Session): The SQLAlchemy database session.
+            - title (str): The title of the post to retrieve.
+
+            Returns:
+            - BlogPost: The User object if found, None otherwise.
+
+            Raises:
+            - SQLAlchemyError: If an error occurs while querying the database.
+    """
+
+    try:
+        post = db.session.execute(db.select(BlogPost).where(BlogPost.title == title)).scalar()
+        if post:
+            logging.info(f"Post with id {title} retrieved successfully.")
+        else:
+            logging.info(f"No post found with id {title}.")
+        return post
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logging.error(f"Error retrieving post by id {title}: {e}")
+        raise e
+
 
 
 def get_all_posts(db: Session) -> List[BlogPost]:
@@ -136,8 +168,8 @@ def update_post(db: Session, update_form: UpdatePostForm, post_to_update: BlogPo
         logging.error(f"Unexpected error occurred: {e}")
         raise e
 
-def delete_post(db: Session, post_id: str):
 
+def delete_post(db: Session, post_id: str):
     """
         Deletes a post that is specified by post id.
 

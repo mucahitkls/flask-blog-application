@@ -5,9 +5,6 @@ from sqlalchemy.orm import Session
 from app.forms import RegisterUserForm
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 def get_user_by_mail(db: Session, email: str) -> User:
     """
         Retrieves a user by email.

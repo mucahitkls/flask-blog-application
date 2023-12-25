@@ -10804,3 +10804,13 @@ header.masthead .post-heading .meta a {
   color: blue;
   font-family: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+.flash-warning {
+    color: red;
+}
+
+/* Or for more specific styling */
+.flash-warning {
+    color: red; /* Red text */
+    font-weight: bold; /* Make it bold */
+}
