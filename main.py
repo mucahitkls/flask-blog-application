@@ -3,15 +3,18 @@ from app.blueprints import user_routes, post_routes, static_routes
 from flask_bootstrap import Bootstrap5
 from functools import wraps
 from flask import abort
-from app.models import User, db
+from app.models import User
+from app.database import db
 from flask_gravatar import Gravatar
 from flask_login import LoginManager, current_user
 from flask_ckeditor import CKEditor
+
 import dotenv
 import os
+
 dotenv.load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET_KEY")
 Bootstrap5(app)
 
@@ -37,6 +40,7 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=False,
                     base_url=None)
+
 
 def admin_only(f):
     @wraps(f)

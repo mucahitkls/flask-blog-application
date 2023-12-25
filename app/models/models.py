@@ -1,4 +1,4 @@
-from .config import db
+from app.database import db
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 
