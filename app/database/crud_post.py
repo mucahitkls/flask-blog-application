@@ -169,30 +169,30 @@ def update_post(db: Session, update_form: UpdatePostForm, post_to_update: BlogPo
         raise e
 
 
-def delete_post(db: Session, post_id: str):
+def delete_post(db: Session, post_id: int):
     """
         Deletes a post that is specified by post id.
 
         Parameters:
         - db (Session): The SQLAlchemy database session.
-        - post_id (int) : The id number of the post to be deleted.
+        - post_id (int): The id number of the post to be deleted.
 
         Returns:
         - None
-
     """
 
     post_to_delete = get_post_by_id(db=db, post_id=post_id)
-
-    try:
-        db.session.delete(post_to_delete)
-        db.session.commit()
-        logging.info(f"Post: {post_to_delete.title} deleted successfully.")
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        logging.error(f"Error deleting Post: {post_to_delete.title}: {e}")
-        raise e
-
-    except Exception as e:
-        logging.error(f"Unexpected error occurred: {e}")
-        raise e
+    if post_to_delete:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+            logging.info(f"Post: {post_to_delete.title} deleted successfully.")
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            logging.error(f"Error deleting Post: {post_to_delete.title}: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Unexpected error occurred: {e}")
+            raise
+    else:
+        logging.warning(f"Attempted to delete a non-existing post with id: {post_id}")
